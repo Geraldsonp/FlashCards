@@ -20,7 +20,7 @@ public class FlashCardService : IFlashCardService
         };
     }
 
-    public FlashCard GetFlashCard()
+    public FlashCard GetFlashCard(int id)
     {
         return new FlashCard()
         {
@@ -31,16 +31,17 @@ public class FlashCardService : IFlashCardService
 
     public void DeleteFlashCard()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Deleted");
     }
 
-    public FlashCard UpdateFlashCard()
+    public FlashCard UpdateFlashCard(FlashCard flashCard)
     {
-        throw new NotImplementedException();
+        Console.WriteLine($"New Card Info: Front:{flashCard.CardFront} - Bad:{flashCard.CardBack}");
+        return flashCard;
     }
 
     public void AddFlashCard(FlashCard card)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Added");
     }
 }

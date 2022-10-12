@@ -85,7 +85,42 @@ public class FlashCardsManager
 
     public void EditCard(Stack selectedStack)
     {
-        throw new NotImplementedException();
+        var isCardSelected = true;
+        var cardId = 0;
+        var cards = _flashCardService.GetFlashCards().Where(x => x.Id == selectedStack.Id);
+        DisplayCards(cards, selectedStack.Name);
+
+        while (isCardSelected)
+        {
+            cardId = Int32.Parse(Console.ReadLine());
+            if (cards.Any(x => x.Id == cardId))
+            {
+                isCardSelected = false;
+            }
+            Console.WriteLine("Please Try Again id is not correct");
+        }
+
+        var card = _flashCardService.GetFlashCard(cardId);
+
+        Console.Write($"CardFront:{card.CardFront} CardFront:{card.CardBack}");
+
+        Console.Write($"1 - Update Front; 2 - Update back;");
+        var input = Console.ReadLine();
+
+        switch (input)
+        {
+            case "1" :
+                Console.Write("Enter Card Front: ");
+                card.CardFront = Console.ReadLine();
+                break;
+            case "2" :
+                Console.Write("Enter Card Back: ");
+                card.CardBack = Console.ReadLine();
+                break;
+        }
+
+        _flashCardService.UpdateFlashCard(card);
+
     }
 
     public void DeleteCard(Stack selectedStack)
