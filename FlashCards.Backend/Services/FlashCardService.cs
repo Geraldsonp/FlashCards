@@ -12,10 +12,16 @@ public class FlashCardService : IFlashCardService
             new FlashCard()
             {
                 Id = 1,
-                Name = "Waseqpwoe",
                 StackId = 1,
                 CardFront = "Testing",
                 CardBack = "testing back"
+            },
+            new FlashCard()
+            {
+                Id = 2,
+                StackId = 1,
+                CardFront = "Testing 2",
+                CardBack = "testing back 2"
             }
         };
     }
@@ -25,11 +31,12 @@ public class FlashCardService : IFlashCardService
         return new FlashCard()
         {
             Id = 1,
-            Name = "Waseqpwoe"
+            CardFront = "Waseqpwoe",
+            CardBack = "test"
         };
     }
 
-    public void DeleteFlashCard()
+    public void DeleteFlashCard(int cardId)
     {
         Console.WriteLine("Deleted");
     }

@@ -15,7 +15,7 @@ public class FlashCardsManager
         _menus = menus;
     }
 
-    public string ShowFlashCardsMenu(Stack stackName)
+    public string? ShowFlashCardsMenu(Stack stackName)
     {
         Console.WriteLine("+--------------------------------------+");
         Console.WriteLine($"Current working stack: {stackName.Name}");
@@ -71,8 +71,6 @@ public class FlashCardsManager
         Console.WriteLine($"+----+-----------{selectedStack.Name}-----------+----+");
         Console.WriteLine("-------------------Creating New Card--------------------");
         var card = new FlashCard();
-        Console.Write("Enter Card Name: ");
-        card.Name = Console.ReadLine();
         Console.Write("Enter Card Front: ");
         card.CardFront = Console.ReadLine();
         Console.Write("Enter Card Back: ");
@@ -92,19 +90,22 @@ public class FlashCardsManager
 
         while (isCardSelected)
         {
-            cardId = Int32.Parse(Console.ReadLine());
+            cardId = Int32.Parse(Console.ReadLine()!);
+
             if (cards.Any(x => x.Id == cardId))
             {
                 isCardSelected = false;
+                break;
             }
             Console.WriteLine("Please Try Again id is not correct");
         }
 
         var card = _flashCardService.GetFlashCard(cardId);
 
-        Console.Write($"CardFront:{card.CardFront} CardFront:{card.CardBack}");
+        Console.WriteLine($"CardFront:{card.CardFront} CardFront:{card.CardBack}");
 
-        Console.Write($"1 - Update Front; 2 - Update back;");
+        Console.WriteLine($"1 - Update Front; 2 - Update back;");
+
         var input = Console.ReadLine();
 
         switch (input)
@@ -125,6 +126,39 @@ public class FlashCardsManager
 
     public void DeleteCard(Stack selectedStack)
     {
-        throw new NotImplementedException();
+        var cards = _flashCardService.GetFlashCards();
+
+        DisplayCards(cards, selectedStack.Name);
+
+        Console.Write("Please enter a card Id to delete it:");
+
+        var isCardSelected = true;
+        int cardId = 0;
+
+        while (isCardSelected)
+        {
+            cardId = Int32.Parse(Console.ReadLine()!);
+
+            if (cards.Any(x => x.Id == cardId))
+            {
+                break;
+            }
+            Console.WriteLine("Please Try Again Id is not correct");
+        }
+
+        Console.WriteLine($"Are you sure you want to delete card id:{cardId}");
+        Console.WriteLine("Y - Yes");
+        Console.WriteLine("N - No");
+
+        var response = Console.ReadLine().ToUpper();
+
+        if (response == "Y")
+        {
+            _flashCardService.DeleteFlashCard(cardId);
+            Console.WriteLine("Card Deleted");
+        }else if (response == "N")
+        {
+            Console.WriteLine("Please try again with Another Card");
+        }
     }
 }

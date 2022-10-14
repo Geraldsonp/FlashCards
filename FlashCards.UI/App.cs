@@ -66,8 +66,9 @@ public class App
     {
         var selectedStack = _stacksManager.SelectStack();
 
-        var isTrue = true;
-        while (isTrue)
+        var doContinue = true;
+
+        while (doContinue)
         {
             var result = _flashCardsManager.ShowFlashCardsMenu(selectedStack);
             switch (result)

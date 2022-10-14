@@ -6,7 +6,7 @@ public interface IFlashCardService
 {
     public IEnumerable<FlashCard> GetFlashCards();
     public FlashCard GetFlashCard(int id);
-    public void DeleteFlashCard();
+    public void DeleteFlashCard(int cardId);
     public FlashCard UpdateFlashCard(FlashCard flashCard);
     void AddFlashCard(FlashCard card);
 }
