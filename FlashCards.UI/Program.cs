@@ -22,6 +22,6 @@ void ConfigureServices(IServiceCollection services)
     services.AddSingleton<IFlashCardService, FlashCardService>();
     services.AddSingleton<IStackService, StackService>();
     services.AddSingleton<IMenus, Menus>();
-    services.AddSingleton<StacksManager, StacksManager>();
-    services.AddSingleton<FlashCardsManager, FlashCardsManager>();
+    services.AddSingleton<StacksController, StacksController>();
+    services.AddSingleton<FlashCardsController, FlashCardsController>();
 }

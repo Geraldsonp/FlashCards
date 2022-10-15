@@ -4,12 +4,12 @@ using FlashCards.UI.Menus.Interfaces;
 
 namespace FlashCards.UI.Controllers;
 
-public class StacksManager
+public class StacksController
 {
     private readonly IStackService _stackService;
     private readonly IMenus _menus;
 
-    public StacksManager(IStackService stackService, IMenus menus)
+    public StacksController(IStackService stackService, IMenus menus)
     {
         _stackService = stackService;
         _menus = menus;

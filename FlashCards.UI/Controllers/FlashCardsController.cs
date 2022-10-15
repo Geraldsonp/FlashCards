@@ -4,12 +4,12 @@ using FlashCards.UI.Menus.Interfaces;
 
 namespace FlashCards.UI.Controllers;
 
-public class FlashCardsManager
+public class FlashCardsController
 {
     private readonly IFlashCardService _flashCardService;
     private readonly IMenus _menus;
 
-    public FlashCardsManager(IFlashCardService flashCardService, IMenus menus)
+    public FlashCardsController(IFlashCardService flashCardService, IMenus menus)
     {
         _flashCardService = flashCardService;
         _menus = menus;

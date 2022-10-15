@@ -1,4 +1,5 @@
-﻿using FlashCards.Backend.Entities;
+﻿using FlashCards.Backend.DataAccess;
+using FlashCards.Backend.Entities;
 using FlashCards.Backend.Services.Interfaces;
 
 namespace FlashCards.Backend.Services;
@@ -49,6 +50,8 @@ public class FlashCardService : IFlashCardService
 
     public void AddFlashCard(FlashCard card)
     {
+        var repo = new Database();
+        repo.FlashCards.Create(card);
         Console.WriteLine("Added");
     }
 }
