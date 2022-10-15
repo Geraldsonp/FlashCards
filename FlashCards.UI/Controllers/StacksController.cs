@@ -16,28 +16,21 @@ public class StacksController
     }
     public Stack SelectStack()
     {
+        Console.Clear();
         var isMatch = true;
         var stacks = _stackService.GetStacks();
-        Console.WriteLine("+-------------+");
-        Console.WriteLine("|     Name    |");
-        Console.WriteLine("+-------------+");
-        Console.WriteLine("");
+        Console.WriteLine("+-------------------+");
+        Console.WriteLine("|----Stack Name-----|");
         foreach (var stack in stacks)
         {
-            Console.WriteLine("+-------------+");
-            Console.WriteLine($"| {stack.Name} |");
-            Console.WriteLine("+-------------+");
+            Console.WriteLine("+-------------------+");
+            Console.WriteLine($"|{stack.Name, 10}         |");
+            Console.WriteLine("+-------------------+");
         }
-        Console.WriteLine("");
-        Console.WriteLine("Choose a stack of flashCards to interact with");
-        Console.WriteLine("");
-        Console.WriteLine("+---------------------------+");
-        Console.WriteLine("Input a current stack name");
-        Console.WriteLine("Or input 0 to exit");
-        Console.WriteLine("+---------------------------+");
 
         while (isMatch)
         {
+            Console.Write("Input a current stack name: ");
             var result = Console.ReadLine();
             if (stacks.Any(x => x.Name == result))
             {
@@ -57,6 +50,7 @@ public class StacksController
 
     public void UpdateOrDeleteStack(Stack stack)
     {
+        Console.Clear();
         Console.WriteLine("+--------------------------------------+");
         Console.WriteLine($"Current working stack: {stack.Name}");
         Console.WriteLine("");

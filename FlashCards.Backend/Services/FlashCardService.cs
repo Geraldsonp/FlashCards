@@ -1,4 +1,5 @@
-﻿using FlashCards.Backend.DataAccess;
+﻿using FlashCards.Backend.Contracts;
+using FlashCards.Backend.DataAccess;
 using FlashCards.Backend.Entities;
 using FlashCards.Backend.Services.Interfaces;
 
@@ -6,52 +7,37 @@ namespace FlashCards.Backend.Services;
 
 public class FlashCardService : IFlashCardService
 {
-    public IEnumerable<FlashCard> GetFlashCards()
+    private readonly IDatabase _repository;
+    public FlashCardService()
     {
-        return new[]
-        {
-            new FlashCard()
-            {
-                Id = 1,
-                StackId = 1,
-                CardFront = "Testing",
-                CardBack = "testing back"
-            },
-            new FlashCard()
-            {
-                Id = 2,
-                StackId = 1,
-                CardFront = "Testing 2",
-                CardBack = "testing back 2"
-            }
-        };
+        _repository = new Database();
+    }
+    public IEnumerable<FlashCard> GetFlashCards(int stackId)
+    {
+        return _repository.FlashCards.GetAll(stackId);
     }
 
     public FlashCard GetFlashCard(int id)
     {
-        return new FlashCard()
-        {
-            Id = 1,
-            CardFront = "Waseqpwoe",
-            CardBack = "test"
-        };
+        return _repository.FlashCards.Get(id);
     }
 
     public void DeleteFlashCard(int cardId)
     {
-        Console.WriteLine("Deleted");
+        _repository.FlashCards.Delete(cardId);
     }
 
     public FlashCard UpdateFlashCard(FlashCard flashCard)
     {
-        Console.WriteLine($"New Card Info: Front:{flashCard.CardFront} - Bad:{flashCard.CardBack}");
+        _repository.FlashCards.Update(flashCard);
+        Console.WriteLine($"New Card Info: Front: {flashCard.Front} - Back: {flashCard.Back}");
         return flashCard;
     }
 
     public void AddFlashCard(FlashCard card)
     {
-        var repo = new Database();
-        repo.FlashCards.Create(card);
+
+        _repository.FlashCards.Create(card);
         Console.WriteLine("Added");
     }
 }

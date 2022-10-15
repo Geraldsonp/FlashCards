@@ -35,19 +35,15 @@ public class FlashCardsController
 
     private void DisplayCards(IEnumerable<FlashCard> cards, string stackName)
     {
-        Console.WriteLine($"+----+-----------{stackName}-----------+----+");
-        Console.WriteLine($"| Id |    Front       |     Back       |----|");
-        Console.WriteLine($"+----+----------------+----------------+----+");
+        Console.WriteLine($"+----------{stackName.PadLeft(20, '-')}---------------+");
+        Console.WriteLine($"|{"Id", -3} {"|", -5}{"Front", -15}{"|", -5} {"Back", -15}{"|", -5}");
+        Console.WriteLine($"+--------------------------------------------------+");
         foreach (var card in cards)
         {
-            Console.WriteLine($"| {card.Id} | {card.CardFront}  | {card.CardBack} |----|");
-            Console.WriteLine($"+----+----------------+-------------------------+----+");
+            Console.WriteLine($"|{card.Id, -3} {"|", -5}{card.Front, -15}{"|", -5}{card.Back, -15} {"|", -5}");
+            Console.WriteLine($"+----------------------------------------------------+");
         }
         Console.WriteLine($"");
-        Console.WriteLine($"+----+----------------+-------------------------+----+");
-        Console.WriteLine($"Input an Id of a flashCard");
-        Console.WriteLine($"Or 0 to exit");
-        Console.WriteLine($"+----+----------------+-------------------------+----+");
     }
 
 
@@ -55,12 +51,12 @@ public class FlashCardsController
     {
         if (amount is null)
         {
-            var flashCards = _flashCardService.GetFlashCards().Where(x => x.StackId == selectedStack.Id);
+            var flashCards = _flashCardService.GetFlashCards(selectedStack.Id);
             DisplayCards(flashCards, selectedStack.Name);
         }
         else
         {
-            var flashCards = _flashCardService.GetFlashCards().Where(x => x.StackId == selectedStack.Id).Take(amount.Value);
+            var flashCards = _flashCardService.GetFlashCards(selectedStack.Id).Take(amount.Value);
             DisplayCards(flashCards, selectedStack.Name);
         }
 
@@ -68,13 +64,14 @@ public class FlashCardsController
 
     public void CreateCard(Stack selectedStack)
     {
+        Console.Clear();
         Console.WriteLine($"+----+-----------{selectedStack.Name}-----------+----+");
         Console.WriteLine("-------------------Creating New Card--------------------");
         var card = new FlashCard();
         Console.Write("Enter Card Front: ");
-        card.CardFront = Console.ReadLine();
+        card.Front = Console.ReadLine();
         Console.Write("Enter Card Back: ");
-        card.CardBack = Console.ReadLine();
+        card.Back = Console.ReadLine();
         card.StackId = selectedStack.Id;
 
         _flashCardService.AddFlashCard(card);
@@ -84,8 +81,8 @@ public class FlashCardsController
     public void EditCard(Stack selectedStack)
     {
         var isCardSelected = true;
-        var cardId = 0;
-        var cards = _flashCardService.GetFlashCards().Where(x => x.Id == selectedStack.Id);
+        var cardId = 0 ;
+        var cards = _flashCardService.GetFlashCards(selectedStack.Id);
         DisplayCards(cards, selectedStack.Name);
 
         while (isCardSelected)
@@ -102,7 +99,7 @@ public class FlashCardsController
 
         var card = _flashCardService.GetFlashCard(cardId);
 
-        Console.WriteLine($"CardFront:{card.CardFront} CardFront:{card.CardBack}");
+        Console.WriteLine($"Front:{card.Front} Front:{card.Back}");
 
         Console.WriteLine($"1 - Update Front; 2 - Update back;");
 
@@ -112,11 +109,11 @@ public class FlashCardsController
         {
             case "1" :
                 Console.Write("Enter Card Front: ");
-                card.CardFront = Console.ReadLine();
+                card.Front = Console.ReadLine();
                 break;
             case "2" :
                 Console.Write("Enter Card Back: ");
-                card.CardBack = Console.ReadLine();
+                card.Back = Console.ReadLine();
                 break;
         }
 
@@ -126,7 +123,7 @@ public class FlashCardsController
 
     public void DeleteCard(Stack selectedStack)
     {
-        var cards = _flashCardService.GetFlashCards();
+        var cards = _flashCardService.GetFlashCards(selectedStack.Id);
 
         DisplayCards(cards, selectedStack.Name);
 

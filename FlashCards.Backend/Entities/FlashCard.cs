@@ -4,8 +4,8 @@ public class FlashCard
 {
     public int Id { get; set; }
 
-    public string? CardFront { get; set; }
+    public string? Front { get; set; }
 
-    public string? CardBack { get; set; }
+    public string? Back { get; set; }
     public int StackId { get; set; }
 }
