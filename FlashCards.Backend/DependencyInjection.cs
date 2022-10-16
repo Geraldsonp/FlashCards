@@ -8,11 +8,9 @@ namespace FlashCards.Backend;
 
 public static class DependencyInjection
 {
-    public static void RegisterBackendServices(this ServiceCollection services)
+    public static void RegisterBackendServices(this IServiceCollection services)
     {
         services.AddTransient<IDatabase, Database>();
-        services.AddTransient<IFlashCardRepository, FlashCardRepo>();
-        services.AddTransient<IStackRepository, StackRepo>();
         services.AddTransient<IFlashCardService, FlashCardService>();
         services.AddTransient<IStackService, StackService>();
 

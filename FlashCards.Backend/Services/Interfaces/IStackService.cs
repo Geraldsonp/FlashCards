@@ -5,7 +5,8 @@ namespace FlashCards.Backend.Services.Interfaces;
 public interface IStackService
 {
     public IEnumerable<Stack> GetStacks();
-    public Stack GetStack();
+    public Stack GetStack(int id);
     public void DeleteStack(int stackId);
-    public Stack UpdateStack(Stack stack);
+    public bool UpdateStack(Stack stack);
+    public bool Create(Stack stack);
 }

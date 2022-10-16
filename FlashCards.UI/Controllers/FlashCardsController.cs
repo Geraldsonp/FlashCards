@@ -17,8 +17,10 @@ public class FlashCardsController
 
     public string? ShowFlashCardsMenu(Stack stackName)
     {
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("+--------------------------------------+");
         Console.WriteLine($"Current working stack: {stackName.Name}");
+        Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("");
         Console.WriteLine("0 to return to main menu");
         Console.WriteLine("X to change current stack");

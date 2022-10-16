@@ -7,64 +7,87 @@ namespace FlashCards.UI;
 
 public class App
 {
-    private readonly IMenus _menus;
-    private readonly IFlashCardService _flashCardService;
-    private readonly IStackService _stackService;
     private readonly StacksController _stacksController;
     private readonly FlashCardsController _flashCardsController;
 
+    //Todo: remove what is not being used
     public App(IMenus menus, IFlashCardService flashCardService, IStackService stackService,
         StacksController stacksController, FlashCardsController flashCardsController)
     {
-        _menus = menus;
-        _flashCardService = flashCardService;
-        _stackService = stackService;
         _stacksController = stacksController;
         _flashCardsController = flashCardsController;
     }
 
     public void Run()
     {
-        _menus.ShowMainMenu();
-        var result = Console.ReadLine();
-        switch (result.ToUpper())
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.WriteLine("Welcome to Cards Rain");
+        Console.WriteLine("Where you can create sets of cards to forge them in your brain");
+        Console.ForegroundColor = ConsoleColor.White;
+        while (true)
         {
-            case "0":
-                Console.WriteLine("Have a good One");
-                break;
-            case "S":
-                ManageStacks();
-                Console.WriteLine("Ended in Case S Main menu");
-                break;
-            case "F":
-                ManageFlashCards();
-                break;
-            case "R":
-                Console.WriteLine("Study");
-                break;
-            case "L":
-                Console.WriteLine("View Study session data");
-                break;
+            ShowMainMenu();
+            var result = Console.ReadLine();
+            switch (result.ToUpper())
+            {
+                case "0":
+                    Console.WriteLine("Have a good One");
+                    return;
+                case "S":
+                    ManageStacks();
+                    break;
+                case "F":
+                    ManageFlashCards();
+                    break;
+                case "R":
+                    Console.WriteLine("Study");
+                    break;
+                case "L":
+                    Console.WriteLine("View Study session data");
+                    break;
+            }
         }
     }
 
     private void ManageStacks()
     {
+        //Todo: Complete This Section
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("------------Manage Stacks------------");
+        Console.ForegroundColor = ConsoleColor.White;
         var continueManageStack = true;
         while (continueManageStack)
         {
-            var stack = _stacksController.SelectStack();
-            if (stack is null)
+            var answer = _stacksController.ShowStackOperationsMenu();
+
+            switch (answer)
             {
-                return;
+                case "0":
+                    return;
+                case "C":
+                    _stacksController.CreateStack();
+                    break;
+                case "D":
+                    _stacksController.DeleteStack();
+                    break;
+                case "R":
+                    _stacksController.UpdateStack();
+                    break;
+                case "F":
+                    ManageFlashCards();
+                    break;
+                default: continue;
             }
-            _stacksController.UpdateOrDeleteStack(stack);
         }
     }
 
     private void ManageFlashCards()
     {
-        var selectedStack = _stacksController.SelectStack();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("------------Manage Flash Cards------------");
+        Console.ForegroundColor = ConsoleColor.White;
+
+        var selectedStack = _stacksController.ChooseStackMenu();
 
         var doContinue = true;
 
@@ -76,7 +99,7 @@ public class App
                 case "0":
                     return;
                 case "X":
-                    selectedStack = _stacksController.SelectStack();
+                    selectedStack = _stacksController.ChooseStackMenu();
                     continue;
                 case "V":
                     _flashCardsController.ShowFlashCard(selectedStack);
@@ -97,7 +120,16 @@ public class App
                     continue;
             }
         }
+    }
 
-
+    public void ShowMainMenu()
+    {
+        Console.WriteLine("______________________________");
+        Console.WriteLine("0 to exit");
+        Console.WriteLine("S to Manage Stacks");
+        Console.WriteLine("F to Manage FlashCards");
+        Console.WriteLine("R to Study");
+        Console.WriteLine("L to View Study session data");
+        Console.WriteLine("______________________________");
     }
 }

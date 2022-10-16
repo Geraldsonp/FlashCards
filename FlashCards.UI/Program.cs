@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using FlashCards.Backend;
 using FlashCards.Backend.Services;
 using FlashCards.Backend.Services.Interfaces;
 using FlashCards.UI;
@@ -19,9 +20,8 @@ services
 
 void ConfigureServices(IServiceCollection services)
 {
-    services.AddSingleton<IFlashCardService, FlashCardService>();
-    services.AddSingleton<IStackService, StackService>();
-    services.AddSingleton<IMenus, Menus>();
-    services.AddSingleton<StacksController, StacksController>();
-    services.AddSingleton<FlashCardsController, FlashCardsController>();
+    services.AddTransient<IMenus, Menus>();
+    services.AddTransient<StacksController, StacksController>();
+    services.AddTransient<FlashCardsController, FlashCardsController>();
+    services.RegisterBackendServices();
 }

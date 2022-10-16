@@ -1,34 +1,39 @@
-﻿using FlashCards.Backend.Entities;
+﻿using FlashCards.Backend.Contracts;
+using FlashCards.Backend.Entities;
 using FlashCards.Backend.Services.Interfaces;
 
 namespace FlashCards.Backend.Services;
 
 public class StackService : IStackService
 {
+    private readonly IDatabase _database;
+
+    public StackService(IDatabase database)
+    {
+        _database = database;
+    }
     public IEnumerable<Stack> GetStacks()
     {
-        return new[]
-        {
-            new Stack()
-            {
-                Id = 1,
-                Name = "Randon"
-            }
-        };
+        return _database.Stacks.GetAll();
     }
 
-    public Stack GetStack()
+    public Stack GetStack(int id)
     {
-        throw new NotImplementedException();
+        return _database.Stacks.Get(id);
     }
 
     public void DeleteStack(int stackId)
     {
-        throw new NotImplementedException();
+        var result = _database.Stacks.Delete(stackId);
     }
 
-    public Stack UpdateStack(Stack stack)
+    public bool UpdateStack(Stack stack)
     {
-        throw new NotImplementedException();
+        return _database.Stacks.Update(stack);
+    }
+
+    public bool Create(Stack stack)
+    {
+        return _database.Stacks.Create(stack);
     }
 }
