@@ -9,4 +9,5 @@ public interface IFlashCardService
     public void DeleteFlashCard(int cardId);
     public FlashCard UpdateFlashCard(FlashCard flashCard);
     void AddFlashCard(FlashCard card);
+    void UpdateFlashCards(IEnumerable<FlashCard> cards);
 }

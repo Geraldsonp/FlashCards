@@ -40,4 +40,9 @@ public class FlashCardService : IFlashCardService
         _repository.FlashCards.Create(card);
         Console.WriteLine("Added");
     }
+
+    public void UpdateFlashCards(IEnumerable<FlashCard> cards)
+    {
+       _repository.FlashCards.Update(cards);
+    }
 }

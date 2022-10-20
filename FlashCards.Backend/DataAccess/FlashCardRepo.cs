@@ -109,4 +109,26 @@ public class FlashCardRepo : IFlashCardRepository
 
         return cardObj;
     }
+
+    public void Update(IEnumerable<FlashCard> cards)
+    {
+        var updateCommand = new List<string>();
+        foreach (var flashCard in cards)
+        {
+            updateCommand.Add(
+                $"Update FLASH_CARDS set Front = '{flashCard.Front}', Back = '{flashCard.Back}' WHERE Id = {flashCard.Id};");
+        }
+
+        _connection.Open();
+        SqlCommand command = new SqlCommand()
+        {
+            Connection = _connection,
+            CommandText = string.Join("", updateCommand)
+        };
+
+        var result = command.ExecuteNonQuery();
+
+        _connection.Close();
+        command.Dispose();
+    }
 }
