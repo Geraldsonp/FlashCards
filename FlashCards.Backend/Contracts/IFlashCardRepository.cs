@@ -13,5 +13,6 @@ public interface IFlashCardRepository
     FlashCard Get(int cardId);
 
     IEnumerable<FlashCard> GetAll(int stackId);
+    IEnumerable<FlashCard> GetAll();
     void Update(IEnumerable<FlashCard> cards);
 }

@@ -5,6 +5,7 @@ namespace FlashCards.Backend.Services.Interfaces;
 public interface IFlashCardService
 {
     public IEnumerable<FlashCard> GetFlashCards(int stackId);
+    public IEnumerable<FlashCard> GetStudySessionCards();
     public FlashCard GetFlashCard(int id);
     public void DeleteFlashCard(int cardId);
     public FlashCard UpdateFlashCard(FlashCard flashCard);

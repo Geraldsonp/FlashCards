@@ -110,6 +110,30 @@ public class FlashCardRepo : IFlashCardRepository
         return cardObj;
     }
 
+    public IEnumerable<FlashCard> GetAll()
+    {
+        _connection.Open();
+        SqlCommand command = new SqlCommand()
+        {
+            Connection = _connection,
+            CommandText = $"Select * From FLASH_CARDS;"
+        };
+
+        var reader = new SqlDataAdapter(command);
+        DataTable data = new DataTable();
+        reader.Fill(data);
+
+        var serializedData = JsonConvert.SerializeObject(data);
+
+        var cardObj = JsonConvert.DeserializeObject<IEnumerable<FlashCard>>(serializedData);
+
+        _connection.Close();
+        command.Dispose();
+        data.Dispose();
+
+        return cardObj;
+    }
+
     public void Update(IEnumerable<FlashCard> cards)
     {
         var updateCommand = new List<string>();

@@ -1,6 +1,7 @@
 ﻿using FlashCards.Backend.Entities;
 using FlashCards.Backend.Services.Interfaces;
 using FlashCards.UI.Menus.Interfaces;
+using Sharprompt;
 
 namespace FlashCards.UI.Controllers;
 
@@ -158,6 +159,26 @@ public class FlashCardsController
         }else if (response == "N")
         {
             Console.WriteLine("Please try again with Another Card");
+        }
+    }
+
+    public void StartStudySession()
+    {
+        Console.WriteLine("Please Enter the other side of the card");
+        var rnd = new Random();
+        var cards = _flashCardService.GetStudySessionCards().OrderBy(x => rnd.Next());
+        foreach (var card in cards.ToList())
+        {
+            var answers = cards.Select(x => x.Back)
+                .OrderBy(x => rnd.Next())
+                .Where(x => x != card.Back)
+                .Take(3).ToList();
+
+            answers.Add(card.Back);
+            var orderedAnswers = answers.OrderByDescending(x => rnd.Next()).ToList();
+
+            Prompt.Select(card.Front, orderedAnswers);
+            //Todo: Continue with points and strikes logic
         }
     }
 }

@@ -17,6 +17,16 @@ public class FlashCardService : IFlashCardService
         return _repository.FlashCards.GetAll(stackId);
     }
 
+    public IEnumerable<FlashCard> GetStudySessionCards()
+    {
+        var cards = _repository.FlashCards.GetAll()
+            .OrderBy(x => x.LastStudied)
+            .ThenBy(x => x.LastScore)
+            .Take(15);
+
+        return cards;
+    }
+
     public FlashCard GetFlashCard(int id)
     {
         return _repository.FlashCards.Get(id);

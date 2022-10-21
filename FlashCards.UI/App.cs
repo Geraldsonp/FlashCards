@@ -1,7 +1,10 @@
 ﻿using FlashCards.Backend.Entities;
 using FlashCards.Backend.Services.Interfaces;
 using FlashCards.UI.Controllers;
+using FlashCards.UI.Menus;
 using FlashCards.UI.Menus.Interfaces;
+using Sharprompt;
+using Sharprompt.Fluent;
 
 namespace FlashCards.UI;
 
@@ -11,8 +14,8 @@ public class App
     private readonly FlashCardsController _flashCardsController;
 
     //Todo: remove what is not being used
-    public App(IMenus menus, IFlashCardService flashCardService, IStackService stackService,
-        StacksController stacksController, FlashCardsController flashCardsController)
+    public App(StacksController stacksController,
+        FlashCardsController flashCardsController)
     {
         _stacksController = stacksController;
         _flashCardsController = flashCardsController;
@@ -26,23 +29,23 @@ public class App
         Console.ForegroundColor = ConsoleColor.White;
         while (true)
         {
-            ShowMainMenu();
-            var result = Console.ReadLine();
-            switch (result.ToUpper())
+            var answer = Prompt.Select<MainMenu>("Select an option");
+
+            switch (answer)
             {
-                case "0":
+                case MainMenu.Exit:
                     Console.WriteLine("Have a good One");
                     return;
-                case "S":
+                case MainMenu.ManageStacks:
                     ManageStacks();
                     break;
-                case "F":
+                case MainMenu.ManageFlashCards:
                     ManageFlashCards();
                     break;
-                case "R":
-                    Console.WriteLine("Study");
+                case MainMenu.Study:
+                    _flashCardsController.StartStudySession();
                     break;
-                case "L":
+                case MainMenu.ViewStudysessiondata:
                     Console.WriteLine("View Study session data");
                     break;
             }
@@ -120,16 +123,5 @@ public class App
                     continue;
             }
         }
-    }
-
-    public void ShowMainMenu()
-    {
-        Console.WriteLine("______________________________");
-        Console.WriteLine("0 to exit");
-        Console.WriteLine("S to Manage Stacks");
-        Console.WriteLine("F to Manage FlashCards");
-        Console.WriteLine("R to Study");
-        Console.WriteLine("L to View Study session data");
-        Console.WriteLine("______________________________");
     }
 }
