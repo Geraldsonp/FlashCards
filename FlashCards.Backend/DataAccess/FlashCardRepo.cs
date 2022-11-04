@@ -76,7 +76,12 @@ public class FlashCardRepo : IFlashCardRepository
         DataTable data = new DataTable();
         reader.Fill(data);
 
-        var serializedData = JsonConvert.SerializeObject(data);
+        var serializedData = JsonConvert.SerializeObject(data,
+            new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
         var cardObj = JsonConvert.DeserializeObject<IEnumerable<FlashCard>>(serializedData);
 
         _connection.Close();
@@ -99,7 +104,11 @@ public class FlashCardRepo : IFlashCardRepository
         DataTable data = new DataTable();
         reader.Fill(data);
 
-        var serializedData = JsonConvert.SerializeObject(data);
+        var serializedData = JsonConvert.SerializeObject(data,
+            new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
 
         var cardObj = JsonConvert.DeserializeObject<IEnumerable<FlashCard>>(serializedData);
 
@@ -123,7 +132,11 @@ public class FlashCardRepo : IFlashCardRepository
         DataTable data = new DataTable();
         reader.Fill(data);
 
-        var serializedData = JsonConvert.SerializeObject(data);
+        var serializedData = JsonConvert.SerializeObject(data,
+            new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
 
         var cardObj = JsonConvert.DeserializeObject<IEnumerable<FlashCard>>(serializedData);
 
@@ -140,7 +153,7 @@ public class FlashCardRepo : IFlashCardRepository
         foreach (var flashCard in cards)
         {
             updateCommand.Add(
-                $"Update FLASH_CARDS set Front = '{flashCard.Front}', Back = '{flashCard.Back}' WHERE Id = {flashCard.Id};");
+                $"Update FLASH_CARDS set LastStudied = '{flashCard.LastStudied}', LastScore = '{flashCard.LastScore}' WHERE Id = {flashCard.Id};");
         }
 
         _connection.Open();

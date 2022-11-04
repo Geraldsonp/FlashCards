@@ -4,6 +4,9 @@ namespace FlashCards.Backend.Services.Interfaces;
 
 public interface IStudySession
 {
-    IEnumerable<FlashCard> StartSession(int stackId);
+    IEnumerable<FlashCard> StartSession();
     void FinishSession(IEnumerable<FlashCard> cards);
+
+    
+
 }
