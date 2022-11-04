@@ -9,11 +9,13 @@ public class FlashCardsController
 {
     private readonly IFlashCardService _flashCardService;
     private readonly IMenus _menus;
+    private readonly IStudySession _studySession;
 
-    public FlashCardsController(IFlashCardService flashCardService, IMenus menus)
+    public FlashCardsController(IFlashCardService flashCardService, IMenus menus, IStudySession studySession)
     {
         _flashCardService = flashCardService;
         _menus = menus;
+        _studySession = studySession;
     }
 
     public string? ShowFlashCardsMenu(Stack stackName)
@@ -166,7 +168,7 @@ public class FlashCardsController
     {
         Console.WriteLine("Please Enter the other side of the card");
         var rnd = new Random();
-        var cards = _flashCardService.GetStudySessionCards().OrderBy(x => rnd.Next());
+        var cards = _studySession.StartSession().OrderBy(x => rnd.Next());
         foreach (var card in cards.ToList())
         {
             var answers = cards.Select(x => x.Back)
@@ -176,9 +178,32 @@ public class FlashCardsController
 
             answers.Add(card.Back);
             var orderedAnswers = answers.OrderByDescending(x => rnd.Next()).ToList();
+            card.ShownAt = DateTime.UtcNow;
+            TryAnswerCard(card, orderedAnswers);
 
-            Prompt.Select(card.Front, orderedAnswers);
-            //Todo: Continue with points and strikes logic
+        }
+
+        _studySession.FinishSession(cards);
+    }
+
+    private void TryAnswerCard(FlashCard card, List<string?> orderedAnswers)
+    {
+        var tries = 0;
+        while (true)
+        {
+            var response = Prompt.Select(card.Front, orderedAnswers);
+            if (response == card.Back)
+            {
+                card.AnsweredAt = DateTime.UtcNow.AddSeconds(tries * 3);
+                Console.WriteLine("Correct");
+                break;
+            }
+
+
+            tries++;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Incorrect");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }

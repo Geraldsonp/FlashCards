@@ -13,6 +13,7 @@ public static class DependencyInjection
         services.AddTransient<IDatabase, Database>();
         services.AddTransient<IFlashCardService, FlashCardService>();
         services.AddTransient<IStackService, StackService>();
+        services.AddTransient<IStudySession, StudySessionService>();
 
     }
 }

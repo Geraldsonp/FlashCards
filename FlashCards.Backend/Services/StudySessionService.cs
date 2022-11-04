@@ -11,12 +11,12 @@ public class StudySessionService: IStudySession
     {
         _flashCardService = flashCardService;
     }
-    public IEnumerable<FlashCard> StartSession(int stackId)
+    public IEnumerable<FlashCard> StartSession()
     {
-        var cards = _flashCardService.GetFlashCards(stackId)
+        var cards = _flashCardService.GetStudySessionCards()
             .OrderBy(x => x.LastScore)
             .ThenBy(x => x.LastStudied)
-            .Take(15);
+            .Take(5);
         return cards;
     }
 
@@ -24,9 +24,9 @@ public class StudySessionService: IStudySession
     {
         foreach (var flashCard in cards)
         {
-            var result = flashCard.ShownAt.Second - flashCard.AnsweredAt.Second;
+            var timeSpan = flashCard.AnsweredAt - flashCard.ShownAt;
+            var result = 15 - timeSpan.TotalSeconds;
             flashCard.LastStudied = DateTime.UtcNow;
-
             if (result > 15)
             {
                 flashCard.LastScore = 0;
