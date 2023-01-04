@@ -6,4 +6,7 @@ public interface IStudySession
 {
     IEnumerable<FlashCard> StartSession();
     void FinishSession(IEnumerable<FlashCard> cards);
+
+    
+
 }
