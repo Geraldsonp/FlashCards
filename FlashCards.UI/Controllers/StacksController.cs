@@ -15,167 +15,35 @@ public class StacksController
         _menus = menus;
     }
 
-    public string ShowStackOperationsMenu()
+    public void DeleteStack(Stack selectedStack)
     {
-        Console.WriteLine("0 - To go back");
-        Console.WriteLine("C - To create new Stack");
-        Console.WriteLine("D - To delete Stack");
-        Console.WriteLine("R - To rename Stack");
-        Console.WriteLine("F - To manage stack Flash Cards");
-
-        return Console.ReadLine().ToUpper();
+        _stackService.DeleteStack(selectedStack.Id);
     }
 
-    public Stack ChooseStackMenu()
+    public bool CreateStack(string stackName)
     {
-        var isMatch = true;
-        var stacks = _stackService.GetStacks();
-        Console.WriteLine("|-------------Stack Name-------------|");
-        foreach (var stack in stacks)
+        return _stackService.Create(new Stack()
         {
-            Console.WriteLine("+------------------------------------+");
-            Console.WriteLine($"|     {stack.Name, 18}             |");
-        }
-
-        while (isMatch)
-        {
-            Console.WriteLine("");
-            Console.Write("Input a current stack name: ");
-            var result = Console.ReadLine();
-            if (stacks.Any(x => x.Name == result))
-            {
-                return stacks.SingleOrDefault(x => x.Name == result);
-            }
-
-            if (result == "0")
-            {
-                return null;
-            }
-
-            Console.WriteLine("Please Verify the name");
-        }
-
-        return null;
+            Name = stackName
+        });
     }
 
-    public void DeleteStack()
+    public void UpdateStack(Stack selectedStack)
     {
-        var stack = ChooseStackMenu();
-
-        Console.WriteLine($"Are you sure to delete stack: {stack.Name}");
-        Console.WriteLine("");
-        Console.WriteLine($"Y - Yes");
-        Console.WriteLine($"N - NO");
-
-        while (true)
-        {
-            var answer = Console.ReadLine().ToUpper();
-
-            switch (answer)
-            {
-                case "Y":
-                    _stackService.DeleteStack(stack.Id);
-                    return;
-                case "N":
-                    return;
-                default:
-                    Console.WriteLine("Please check answer");
-                    continue;
-            }
-        }
+        _stackService.UpdateStack(selectedStack);
     }
 
-    public void CreateStack()
+    public void ShowStacks()
     {
-        var stack = new Stack();
-
-        while (true)
-        {
-            Console.Write("Enter Stack Name: ");
-
-            stack.Name = Console.ReadLine();
-
-            Console.WriteLine("Are you sure you want to create a stack with this information: ");
-
-            Console.WriteLine("");
-            Console.WriteLine($"Name: {stack.Name}");
-            Console.WriteLine("");
-
-            Console.WriteLine("Y - Yes");
-            Console.WriteLine("N - No");
-            Console.WriteLine("");
-
-            var result = Console.ReadLine().ToUpper();
-
-            switch (result)
-            {
-                case "Y":
-                    var isSucess = _stackService.Create(stack);
-                    if (isSucess)
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine("Stack Was Added SuccessFully");
-                    }
-                    else
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine("There was an Error");
-                    }
-
-                    return;
-
-                case "N":
-                    return;
-
-                default:
-                    Console.WriteLine("Please check your input");
-                    continue;
-            }
-        }
+        _menus.BuildTable(_stackService.GetStacks());
     }
 
-    public void UpdateStack()
+
+    public Stack GetByName()
     {
-        var stack = ChooseStackMenu();
-
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("Enter new Stack Name: ");
-        Console.ForegroundColor = ConsoleColor.White;
-
-        var newName = Console.ReadLine();
-
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"Are you sure you want to rename stack: {stack.Name} to {newName} ?");
-        Console.WriteLine("");
-
-        Console.WriteLine("Y - Yes");
-
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("N - No");
-        Console.ForegroundColor = ConsoleColor.White;
-
-        while (true)
-        {
-            var answer = Console.ReadLine().ToUpper();
-
-            switch (answer)
-            {
-                case "Y":
-                    stack.Name = newName;
-                    _stackService.UpdateStack(stack);
-                    return;
-                case "N":
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Operation Cancelled");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    return;
-                default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error!! Please Verify your Input");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    continue;
-            }
-        }
-
+        ShowStacks();
+        var names = _stackService.GetStacks().Select(x => x.Name);
+        var selected = _menus.ChooseByNameMenu(names, "Stack");
+        return _stackService.GetStacks().FirstOrDefault(stack => stack.Name == selected);
     }
 }

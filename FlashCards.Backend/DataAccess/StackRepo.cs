@@ -20,7 +20,7 @@ public class StackRepo : IStackRepository
         var command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Insert into STACKS (Name) values ('{stack.Name}')"
+            CommandText = $"Insert into {TableNames.Stacks} (Name) values ('{stack.Name}')"
         };
 
         try
@@ -58,7 +58,7 @@ public class StackRepo : IStackRepository
         var command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Update STACKS " +
+            CommandText = $"Update {TableNames.Stacks}" +
                           $"set Name = '{stack.Name}' " +
                           $"Where Id = {stack.Id}"
         };
@@ -98,7 +98,7 @@ public class StackRepo : IStackRepository
         var command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Delete STACKS Where Id = {stackId}"
+            CommandText = $"Delete {TableNames.Stacks} Where Id = {stackId}"
         };
 
         try
@@ -137,7 +137,7 @@ public class StackRepo : IStackRepository
         var command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Select * From STACKS Where ID = {stackId}"
+            CommandText = $"Select * From {TableNames.Stacks} Where ID = {stackId}"
         };
 
         try
@@ -175,7 +175,7 @@ public class StackRepo : IStackRepository
         var command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Select * From STACKS"
+            CommandText = $"Select * From {TableNames.Stacks}"
         };
 
         try

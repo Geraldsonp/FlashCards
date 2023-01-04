@@ -2,7 +2,7 @@
 
 namespace FlashCards.UI.Menus;
 
-public enum MainMenu
+public enum MainMenuOptions
 {
     [Display(Name = "Manage Stacks")]
     ManageStacks,

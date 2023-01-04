@@ -24,7 +24,7 @@ public class FlashCardRepo : IFlashCardRepository
         {
             Connection = _connection,
             CommandText =
-                $"Insert into FLASH_CARDS (Front, Back, StackId) values ('{card.Front}', '{card.Back}', {card.StackId})"
+                $"Insert into {TableNames.FlashCards} (Front, Back, StackId) values ('{card.Front}', '{card.Back}', {card.StackId})"
         };
 
         var result = command.ExecuteNonQuery();
@@ -39,7 +39,7 @@ public class FlashCardRepo : IFlashCardRepository
         SqlCommand command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Update FLASH_CARDS set Front = '{card.Front}', Back = '{card.Back}' WHERE Id = {card.Id};"
+            CommandText = $"Update {TableNames.FlashCards} set Front = '{card.Front}', Back = '{card.Back}' WHERE Id = {card.Id};"
         };
 
         var result = command.ExecuteNonQuery();
@@ -54,7 +54,7 @@ public class FlashCardRepo : IFlashCardRepository
         SqlCommand command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Delete From FLASH_CARDS WHERE ID = {cardId};"
+            CommandText = $"Delete From {TableNames.FlashCards} WHERE ID = {cardId};"
         };
 
         var result = command.ExecuteNonQuery();
@@ -69,7 +69,7 @@ public class FlashCardRepo : IFlashCardRepository
         SqlCommand command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Select * From FLASH_CARDS WHERE Id = {cardId};"
+            CommandText = $"Select * From {TableNames.FlashCards} WHERE Id = {cardId};"
         };
 
         var reader = new SqlDataAdapter(command);
@@ -97,7 +97,7 @@ public class FlashCardRepo : IFlashCardRepository
         SqlCommand command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Select * From FLASH_CARDS where StackId = {stackId};"
+            CommandText = $"Select * From {TableNames.FlashCards} where StackId = {stackId};"
         };
 
         var reader = new SqlDataAdapter(command);
@@ -125,7 +125,7 @@ public class FlashCardRepo : IFlashCardRepository
         SqlCommand command = new SqlCommand()
         {
             Connection = _connection,
-            CommandText = $"Select * From FLASH_CARDS;"
+            CommandText = $"Select * From {TableNames.FlashCards};"
         };
 
         var reader = new SqlDataAdapter(command);
@@ -153,7 +153,7 @@ public class FlashCardRepo : IFlashCardRepository
         foreach (var flashCard in cards)
         {
             updateCommand.Add(
-                $"Update FLASH_CARDS set LastStudied = '{flashCard.LastStudied}', LastScore = '{flashCard.LastScore}' WHERE Id = {flashCard.Id};");
+                $"Update {TableNames.FlashCards} set LastStudied = '{flashCard.LastStudied}', LastScore = '{flashCard.LastScore}' WHERE Id = {flashCard.Id};");
         }
 
         _connection.Open();

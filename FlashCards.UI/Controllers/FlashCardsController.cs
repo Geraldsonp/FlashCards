@@ -20,6 +20,7 @@ public class FlashCardsController
 
     public string? ShowFlashCardsMenu(Stack stackName)
     {
+        //Todo Should not be here
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("+--------------------------------------+");
         Console.WriteLine($"Current working stack: {stackName.Name}");
@@ -52,7 +53,7 @@ public class FlashCardsController
     }
 
 
-    public void ShowFlashCard(Stack selectedStack, int? amount = null)
+    public void ShowStackFlashCards(Stack selectedStack, int? amount = null)
     {
         if (amount is null)
         {
@@ -69,6 +70,8 @@ public class FlashCardsController
 
     public void CreateCard(Stack selectedStack)
     {
+
+        //Todo: This method should just receive que card info and save it.
         Console.Clear();
         Console.WriteLine($"+----+-----------{selectedStack.Name}-----------+----+");
         Console.WriteLine("-------------------Creating New Card--------------------");

@@ -1,46 +1,74 @@
 ﻿using FlashCards.Backend.Entities;
 using FlashCards.UI.Menus.Interfaces;
+using FlashCards.UI.MenusOptionsEnums;
+using Sharprompt;
+using Spectre.Console;
 
 namespace FlashCards.UI.Menus;
 
 public class Menus : IMenus
 {
-    public void ShowMainMenu()
+    public MainMenuOptions ShowMainMenu()
     {
-        Console.WriteLine("______________________________");
-        Console.WriteLine("0 to exit");
-        Console.WriteLine("S to Manage Stacks");
-        Console.WriteLine("F to Manage FlashCards");
-        Console.WriteLine("R to Study");
-        Console.WriteLine("L to View Study session data");
-        Console.WriteLine("______________________________");
+        return Prompt.Select<MainMenuOptions>("Select an option");
     }
 
-    public void ShowSelectStack(IEnumerable<Stack> stacks)
+    public StackOperationsOptions ShowStackOperationsMenu()
     {
-        //Chose Stack Menu
-        Console.WriteLine("+-------------+");
-        Console.WriteLine("|     Name    |");
-        Console.WriteLine("+-------------+");
-        Console.WriteLine("");
-        foreach (var stack in stacks)
+        return Prompt.Select<StackOperationsOptions>("Select an option");
+    }
+
+    public YesOrNo YesOrNoPrompt()
+    {
+        return Prompt.Select<YesOrNo>("Select an option");
+    }
+
+    public void BuildTable<T>(IEnumerable<T> listItems)
+    {
+        var table = new Table();
+
+        foreach (var stack in listItems)
         {
-            Console.WriteLine("+-------------+");
-            Console.WriteLine($"| {stack.Name} |");
-            Console.WriteLine("+-------------+");
+            var propsValues = new List<string>();
+            if (!table.Columns.Any())
+            {
+                foreach (var prop in stack.GetType().GetProperties())
+                {
+                    table.AddColumn(new TableColumn($"[yellow]{prop.Name}[/]").Centered().Width(15));
+                }
+            }
+
+            foreach (var prop in stack.GetType().GetProperties())
+            {
+                propsValues.Add(prop.GetValue(stack, null).ToString());
+            }
+
+            table.AddRow(propsValues.ToArray());
         }
-        Console.WriteLine("");
-        Console.WriteLine("Choose a stack of flashCards to interact with");
-        Console.WriteLine("");
-        Console.WriteLine("+---------------------------+");
-        Console.WriteLine("Input a current stack name");
-        Console.WriteLine("Or input 0 to exit input");
-        Console.WriteLine("+---------------------------+");
+
+        AnsiConsole.Write(table);
     }
 
     public void ShowManageCards(string name)
     {
-        //When Stack is selected
+    }
 
+    public string ChooseByNameMenu(IEnumerable<string> options, string modelName)
+    {
+        return AnsiConsole.Prompt(
+            new TextPrompt<string>($"[green]Please the name of a {modelName}[/]")
+                .PromptStyle("blue")
+                .ValidationErrorMessage($"[red]That is not a valid {modelName} name[/]")
+                .Validate(name =>
+                {
+                    if (options.Any(x => x == name))
+                    {
+                        return ValidationResult.Success();
+                    }
+                    else
+                    {
+                        return ValidationResult.Error($"[red]That is no a valid {modelName} name[/]");
+                    }
+                }));
     }
 }
